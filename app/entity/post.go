@@ -5,14 +5,8 @@ type PostID string
 type Post struct {
 	Id          PostID
 	Description string
-	Image       *Image
+	ImageUrl    string
 	Accepts     []UserID
 	Rejects     []UserID
 	IsAccepted  bool
-}
-
-type Image struct {
-	Base64string string
-	Type string
-	Name string
 }

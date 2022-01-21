@@ -6,7 +6,7 @@ import (
 )
 
 type UserUseCase struct {
-	UserRepository  UserRepository
+	UserRepository UserRepository
 }
 
 func NewUserUseCase(ur UserRepository) *UserUseCase {

@@ -7,7 +7,7 @@ import (
 )
 
 type PostUseCase struct {
-	UserRepository  UserRepository
+	UserRepository UserRepository
 	PostRepository PostRepository
 }
 
@@ -18,18 +18,14 @@ func NewPostUseCase(ur UserRepository, pr PostRepository) *PostUseCase {
 	}
 }
 
-func (pu *PostUseCase) Create(base64string, imageName, imageType, description string) (*entity.Post, error) {
+func (pu *PostUseCase) Create(imageUrl, description string) (*entity.Post, error) {
 	newPost := &entity.Post{
 		Id:          entity.PostID(uuid.New().String()),
 		Description: description,
-		Image: &entity.Image{
-			Base64string: base64string,
-			Name:         imageName,
-			Type:         imageType,
-		},
-		Accepts: []entity.UserID{},
-		Rejects: []entity.UserID{},
-		IsAccepted: false,
+		ImageUrl:    imageUrl,
+		Accepts:     []entity.UserID{},
+		Rejects:     []entity.UserID{},
+		IsAccepted:  false,
 	}
 
 	err := pu.PostRepository.Store(newPost)
