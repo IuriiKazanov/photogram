@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"errors"
 	"github.com/google/uuid"
 	"photogram/app/constants"
 	"photogram/app/entity"
@@ -18,9 +19,10 @@ func NewPostUseCase(ur UserRepository, pr PostRepository) *PostUseCase {
 	}
 }
 
-func (pu *PostUseCase) Create(imageUrl, description string) (*entity.Post, error) {
+func (pu *PostUseCase) Create(imageUrl, description string, userID entity.UserID) (*entity.Post, error) {
 	newPost := &entity.Post{
 		Id:          entity.PostID(uuid.New().String()),
+		UserID:      userID,
 		Description: description,
 		ImageUrl:    imageUrl,
 		Accepts:     []entity.UserID{},
@@ -42,6 +44,10 @@ func (pu *PostUseCase) Accept(userId entity.UserID, postID entity.PostID) error 
 		return err
 	}
 
+	if post.UserID == userId {
+		return errors.New("author can't accept own posts")
+	}
+
 	post.Accepts = append(post.Accepts, userId)
 	if len(post.Accepts) >= constants.AcceptanceCriterion && !post.IsAccepted {
 		post.IsAccepted = true
@@ -59,6 +65,10 @@ func (pu *PostUseCase) Reject(userId entity.UserID, postID entity.PostID) error 
 	post, err := pu.PostRepository.GetById(postID)
 	if err != nil {
 		return err
+	}
+
+	if post.UserID == userId {
+		return errors.New("author can't reject own posts")
 	}
 
 	post.Rejects = append(post.Rejects, userId)
