@@ -11,7 +11,7 @@ type RejectionUseCase struct {
 }
 
 func (ru *RejectionUseCase) Reject(userID entity.UserID, postID entity.PostID) error {
-	post, err := ru.PostRepository.GetById(postID)
+	post, err := ru.PostRepository.GetByID(postID)
 	if err != nil {
 		return err
 	}

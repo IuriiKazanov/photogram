@@ -6,5 +6,4 @@ type User struct {
 	Id       UserID
 	Username string
 	Rating   int
-	//Bookmarks []PostID
 }

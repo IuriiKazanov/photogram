@@ -12,7 +12,7 @@ type UserRepository interface {
 
 type PostRepository interface {
 	Store(post *entity.Post) error
-	GetById(postId entity.PostID) (*entity.Post, error)
+	GetByID(postId entity.PostID) (*entity.Post, error)
 	GetApproved() ([]*entity.Post, error)
 	Update(post *entity.Post) error
 	Delete(postId entity.PostID) error

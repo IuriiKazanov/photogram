@@ -11,7 +11,7 @@ type ApprovalUseCase struct {
 }
 
 func (au *ApprovalUseCase) Approve(userID entity.UserID, postID entity.PostID) error {
-	post, err := au.PostRepository.GetById(postID)
+	post, err := au.PostRepository.GetByID(postID)
 	if err != nil {
 		return err
 	}
