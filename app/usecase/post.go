@@ -1,20 +1,16 @@
 package usecase
 
 import (
-	"errors"
 	"github.com/google/uuid"
-	"photogram/app/constants"
 	"photogram/app/entity"
 )
 
 type PostUseCase struct {
-	UserRepository UserRepository
 	PostRepository PostRepository
 }
 
-func NewPostUseCase(ur UserRepository, pr PostRepository) *PostUseCase {
+func NewPostUseCase(pr PostRepository) *PostUseCase {
 	return &PostUseCase{
-		UserRepository: ur,
 		PostRepository: pr,
 	}
 }
@@ -25,8 +21,6 @@ func (pu *PostUseCase) Create(imageUrl, description string, userID entity.UserID
 		UserID:      userID,
 		Description: description,
 		ImageUrl:    imageUrl,
-		Accepts:     []entity.UserID{},
-		Rejects:     []entity.UserID{},
 		IsAccepted:  false,
 	}
 
@@ -36,65 +30,4 @@ func (pu *PostUseCase) Create(imageUrl, description string, userID entity.UserID
 	}
 
 	return newPost, nil
-}
-
-func (pu *PostUseCase) Accept(userId entity.UserID, postID entity.PostID) error {
-	post, err := pu.PostRepository.GetById(postID)
-	if err != nil {
-		return err
-	}
-
-	if post.UserID == userId {
-		return errors.New("author can't accept own posts")
-	}
-
-	post.Accepts = append(post.Accepts, userId)
-	if len(post.Accepts) >= constants.AcceptanceCriterion && !post.IsAccepted {
-		post.IsAccepted = true
-	}
-
-	err = pu.PostRepository.Update(post)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (pu *PostUseCase) Reject(userId entity.UserID, postID entity.PostID) error {
-	post, err := pu.PostRepository.GetById(postID)
-	if err != nil {
-		return err
-	}
-
-	if post.UserID == userId {
-		return errors.New("author can't reject own posts")
-	}
-
-	post.Rejects = append(post.Rejects, userId)
-
-	// TODO: block posts or users with a lot rejects
-
-	err = pu.PostRepository.Update(post)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (pu *PostUseCase) AddToBookmark(userId entity.UserID, postID entity.PostID) error {
-	user, err := pu.UserRepository.GetById(userId)
-	if err == nil {
-		return err
-	}
-
-	user.Bookmarks = append(user.Bookmarks, postID)
-
-	err = pu.UserRepository.Update(user)
-	if err != nil {
-		return err
-	}
-
-	return nil
 }

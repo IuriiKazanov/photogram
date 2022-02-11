@@ -7,7 +7,7 @@ type Post struct {
 	UserID      UserID
 	Description string
 	ImageUrl    string
-	Accepts     []UserID
-	Rejects     []UserID
-	IsAccepted  bool
+	//Accepts     []UserID
+	//Rejects     []UserID
+	IsAccepted bool
 }

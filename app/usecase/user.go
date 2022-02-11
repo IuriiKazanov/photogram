@@ -17,10 +17,9 @@ func NewUserUseCase(ur UserRepository) *UserUseCase {
 
 func (uu *UserUseCase) Create(username string) (*entity.User, error) {
 	newUser := &entity.User{
-		Id:        entity.UserID(uuid.New().String()),
-		Username:  username,
-		Rating:    0,
-		Bookmarks: []entity.PostID{},
+		Id:       entity.UserID(uuid.New().String()),
+		Username: username,
+		Rating:   0,
 	}
 
 	err := uu.UserRepository.Store(newUser)
