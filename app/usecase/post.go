@@ -22,7 +22,7 @@ func NewPostUseCase(pr PostRepository, v *validator.Validate) *PostUseCase {
 func (pu *PostUseCase) Create(post *api.Post) (*entity.Post, error) {
 	newPost := &entity.Post{
 		Id:          entity.PostID(uuid.New().String()),
-		UserID:      post.UserID,
+		UserID:      entity.UserID(post.UserID),
 		Description: post.Description,
 		ImageUrl:    post.ImageUrl,
 	}

@@ -1,9 +1,7 @@
 package api
 
-import "photogram/app/entity"
-
 type Post struct {
-	UserID      entity.UserID
+	UserID      string
 	Description string
 	ImageUrl    string
 }
